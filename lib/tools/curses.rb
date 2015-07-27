@@ -54,7 +54,7 @@ module Tools
       color = Color::RGB.by_css(css)
       ::Curses.init_color(@num_color, color.r, color.g, color.b)
       @colors[name] = @num_color
-      ::Curses.init_pair(@num_color, @num_color, Curses::COLOR_BLACK)
+      ::Curses.init_pair(@num_color, @num_color, ::Curses::COLOR_BLACK)
       @num_color += 1
     end
 
