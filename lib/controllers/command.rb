@@ -4,7 +4,7 @@ require "models/notice.rb"
 
 module Controllers
 	class Command
-		KEY_BINDING = {127=> :erase, 10=> :return, 259=> :arroy_up, 258=> :arroy_down }
+		KEY_BINDING = {27 => :exit, 263 => :erase, 127=> :erase, 10=> :return, 259=> :arroy_up, 258=> :arroy_down }
 		
 		def initialize(command_input)
 			@command_index = nil
