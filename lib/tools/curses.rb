@@ -16,7 +16,7 @@ module Tools
       @colors = {}
       ::Curses.init_screen
       ::Curses.start_color
-      ::Curses.crmode
+      ::Curses.cbreak
       ::Curses.noecho
       ::Curses.timeout = 0
       ::Curses.stdscr.keypad true
