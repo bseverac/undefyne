@@ -5,7 +5,7 @@ module Tools
         if osx?
           `ifconfig eth0 | grep inet | grep -v inet6 | cut -c 7-17`.strip
         else
-          `ifconfig wlan0 | grep inet | grep -v inet6 | cut -c 20-3`.strip
+          `ifconfig wlan0 | grep inet | grep -v inet6 | cut -c 20-31`.strip
         end
       end
       
