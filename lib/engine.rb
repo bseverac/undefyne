@@ -1,8 +1,6 @@
-#!/usr/bin/env ruby
-
-require "curses"
+require 'curses'
 require 'singleton'
-require "tools/curses.rb"
+require 'tools/curses.rb'
 
 class Engine
   include Singleton  
@@ -26,7 +24,7 @@ class Engine
   end
 
   def step
-    handle_controller
+    handle
     draw
   end
   
@@ -34,8 +32,8 @@ class Engine
   	@current_state.draw
   end
 
-  def handle_controller
-  	@current_state.handle_controller
+  def handle
+  	@current_state.handle
   end
 end
 

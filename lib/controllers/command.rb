@@ -11,18 +11,20 @@ module Controllers
 			@command_input = command_input
 		end
 
-		def handle_controller()
+		def handle
 			while c = Tools::Curses.instance.get_c
 		      if c.is_a?(String) && c.match(/[\w\W]/)
 		        @command_input.add c
 		      elsif KEY_BINDING.has_key? c
 		        send KEY_BINDING[c]
 		      else
-		        Models::Notice.create(message: "Character '#{c}' not allowed", type: :warm)
+		        Models::Notice.create(message: "Character '#{c}' not allowed", color: :red)
 		      end
 		    end
 		end
 	  
+	  private
+
 	  def replace_input_with_command
 	  	@command_input.set Models::Command.find_by_index(@command_index % Models::Command.all.count).string
 	  end
@@ -50,9 +52,9 @@ module Controllers
 	    @command_index = nil
 	    say "Call '#{command.string}' ..."
 	    if command.method.nil?
-	  		say "Bad syntax '#{command.string}'"
+	  		say "Bad syntax '#{command.string}'", :red
 	  	elsif !exec_command command
-	    	say "Command '#{command.method}' not found"
+	    	say "Command '#{command.method}' not found", :red
 	    end
 	    
 	  end
@@ -71,8 +73,8 @@ module Controllers
 	  
 	  ALLOWED_COMMAND = [:say, :exit]
 	  
-	  def say(message = "nothing to tell", type = :info)
-	  	Models::Notice.create message: message, type: type
+	  def say(message = "nothing to tell", color = :white)
+	  	Models::Notice.create message: message, color: color.to_sym
 	  end
 	end
 end

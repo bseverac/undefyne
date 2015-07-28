@@ -1,14 +1,15 @@
 require 'models/base.rb'
+require 'models/line.rb'
 
 module Models
   class Notice < Base
-    attr_reader :message, :time, :type
+    attr_reader :message, :time, :color
 
 
     def initialize(params = {})
       @message = params[:message] || ''
       @time    = params[:time]    || Time.now + 1
-      @type    = params[:type]    || :notice
+      @color   = params[:color]   || :white
     end
 
     def delete_on_over!
@@ -21,6 +22,10 @@ module Models
 
     def size
       @message.size
+    end
+
+    def line
+      Line.new(@message, color)
     end
   end
 end

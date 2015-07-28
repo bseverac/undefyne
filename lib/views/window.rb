@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require 'tools/curses.rb'
 
 module Views
@@ -13,16 +11,17 @@ module Views
       @color    = Tools::Curses.instance.color(params[:color] || :white)
     end
 
+    def draw
+      set_window_aspect
+      @lines.each_with_index do |line, index|
+        draw_line(line, index)
+      end
+      close_window if @lines.empty?
+      refresh
+    end
+    
     def set_lines lines
       @lines = lines
-    end
-
-    def border?
-      @border != :none
-    end
-
-    def window
-      @window ||= Curses::Window.new(0, 0, 0, 0)
     end
     
     def close_window
@@ -30,6 +29,16 @@ module Views
         @window.close 
         @window = nil
       end
+    end
+
+    private
+
+    def border?
+      @border != :none
+    end
+
+    def window
+      @window ||= Curses::Window.new(0, 0, 0, 0)
     end
     
     def lines_max_width
@@ -69,7 +78,7 @@ module Views
     end
 
     def set_window_aspect
-      refresh
+      #refresh
       window.resize(height, width)
       window.box(0,0) if border?
       window.move y, x
@@ -77,24 +86,17 @@ module Views
     
     def draw_line(line, index)
       window.setpos(index + 1, 1)
-      window.attron(@color){
-        window.addstr line
-      }
+      line.words.each do |word|
+        window.attron(Tools::Curses.instance.color(word.color)){
+          window.addstr word.string
+        }
+      end
     end
 
     def refresh
       window.noutrefresh
       window.refresh
       window.clear
-    end
-
-    def draw
-      set_window_aspect
-      @lines.each_with_index do |line, index|
-        draw_line(line, index)
-      end
-      close_window if @lines.empty?
-      refresh
     end
   end
 end
