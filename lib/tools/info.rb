@@ -3,17 +3,21 @@ module Tools
     class << self
       def ip
         if osx?
-          `ifconfig en1 | grep inet | grep -v inet6 | cut -c 7-17`.strip
+          `ifconfig eth0 | grep inet | grep -v inet6 | cut -c 7-17`.strip
         else
-          `hostname`.strip
+          `ifconfig wlan0 | grep inet | grep -v inet6 | cut -c 20-3`.strip
         end
+      end
+      
+      def hostname
+        `hostname`.strip
       end
 
       def thermal
         if osx?
           '?'
         else
-          `awk '{printf "%3.1f\n", $1/1000}' /sys/class/thermal/thermal_zone0/temp`.strip
+          `awk '{printf "%3.1f", $1/1000}' /sys/class/thermal/thermal_zone0/temp`.strip
         end
       end
       
