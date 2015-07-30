@@ -15,14 +15,14 @@ describe 'Models::Notice' do
 			notice = Models::Notice.new
 			expect(notice.message).to eq ''
 			expect(notice.time).to eq time + 1
-			expect(notice.type).to eq :notice
+			expect(notice.color).to eq :white
 		end
 		it 'sets params values' do
 			time = Time.now + 100
-			notice = Models::Notice.new(message: 'message', time: time, type: :type)
+			notice = Models::Notice.new(message: 'message', time: time, color: :color)
 			expect(notice.message).to eq 'message'
 			expect(notice.time).to eq time
-			expect(notice.type).to eq :type
+			expect(notice.color).to eq :color
 		end
 	end
 
