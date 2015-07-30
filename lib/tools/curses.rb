@@ -17,6 +17,14 @@ module Tools
       ::Curses.curs_set 0
       init_colors
     end
+    
+    def width
+      ::Curses.cols
+    end
+    
+    def height
+      ::Curses.lines
+    end
 
     def color_hash
       {

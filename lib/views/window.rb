@@ -8,7 +8,10 @@ module Views
       @position = params[:position]                           || :top
       @border   = params[:border]                             || :none
       @width    = params[:width]                              || :fit
+      @height   = params[:height]                             || :fit
       @color    = Tools::Curses.instance.color(params[:color] || :white)
+      @x        = params[:x] || 0
+      @y        = params[:y] || 0
     end
 
     def draw
@@ -16,7 +19,7 @@ module Views
       @lines.each_with_index do |line, index|
         draw_line(line, index)
       end
-      close_window if @lines.empty?
+      close_window if @lines.empty? && @height == :fit
       refresh
     end
     
@@ -28,6 +31,35 @@ module Views
       if @window
         @window.close 
         @window = nil
+      end
+    end
+    
+    def width
+      case @width
+        when :fit then lines_max_width + padding
+        when :max then Tools::Curses.instance.width
+        else @width
+      end
+    end
+
+    def height
+      return @lines.size + padding if @height == :fit
+      @height
+    end
+
+    def y
+      case @position
+        when :top then 0
+        when :bottom then Tools::Curses.instance.height - height
+        else @y
+      end
+    end
+
+    def x
+      case @align
+        when :left then 0
+        when :center then (Tools::Curses.instance.width - width)/2
+        else @x
       end
     end
 
@@ -44,37 +76,9 @@ module Views
     def lines_max_width
       @lines.map(&:size).max || 0
     end
-
-    def width
-      case @width
-        when :fit then lines_max_width + padding
-        when :max then Curses.cols
-        else raise "Views::Window width: #{@width} bad parameter"
-      end
-    end
     
     def padding
       border? ? 2 : 1
-    end
-
-    def height
-      @lines.size + padding
-    end
-
-    def y
-      case @position
-        when :top then 0
-        when :bottom then Curses.lines - height
-        else raise "Views::Window position: '#{@position}' bad parameter"
-      end
-    end
-
-    def x
-      case @align
-        when :left then 0
-        when :center then (Curses.cols - width)/2
-        else raise "Views::Window align: '#{@align}' bad parameter"
-      end
     end
 
     def set_window_aspect

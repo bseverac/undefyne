@@ -3,18 +3,22 @@
   class Line
     attr_reader :words
 
-    def initialize(string, color)
+    def initialize(string = nil, color = nil)
       clear
-      add(string, color)
+      add(string, color) if string
     end
     
     def size
       @words.map(&:string).map(&:size).reduce(:+)
     end
 
-    def add(string, color)
+    def add(string, color = :white)
       @words << Word.new(string, color)
       self
+    end
+
+    def to_s
+      @words.map(&:string).reduce(:+)
     end
 
     def clear
