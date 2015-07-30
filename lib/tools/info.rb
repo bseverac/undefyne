@@ -3,7 +3,7 @@ module Tools
     class << self
       def ip
         if osx?
-          `ifconfig eth0 | grep inet | grep -v inet6 | cut -c 7-17`.strip
+          %x('/sbin/ifconfig').scan(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/)[1].strip
         else
           `ifconfig wlan0 | grep inet | grep -v inet6 | cut -c 20-31`.strip
         end
@@ -15,9 +15,9 @@ module Tools
 
       def thermal
         if osx?
-          '?'
+          20 + Random.rand(11)
         else
-          `awk '{printf "%3.1f", $1/1000}' /sys/class/thermal/thermal_zone0/temp`.strip
+          `awk '{printf "%3.1f", $1/1000}' /sys/class/thermal/thermal_zone0/temp`.strip.to_f
         end
       end
       
