@@ -8,7 +8,7 @@ module Widgets
     def initialize
       @model_input   = Models::Input.new
       @controller    = Controllers::Command.new @model_input
-      @view          = Views::Window.new(position: :bottom, border: true, width: :max, color: :red)
+      @view          = Views::Window.new(position: :bottom, border: true, width: :max, color: :red, height: 3)
     end
 
     def draw
